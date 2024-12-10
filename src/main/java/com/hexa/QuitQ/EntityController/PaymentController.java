@@ -1,5 +1,9 @@
 package com.hexa.QuitQ.EntityController;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.hexa.QuitQ.DTO.LMSTransactionRequestDto;
-import com.hexa.QuitQ.DTO.LMSUserRequestDto;
 import com.hexa.QuitQ.DTO.PaymentDto;
 import com.hexa.QuitQ.DTO.PaymentRequestDto;
+import com.hexa.QuitQ.DTO.PointsAmountRequestDto;
+import com.hexa.QuitQ.DTO.PointsAmountResponseDto;
+import com.hexa.QuitQ.DTO.UserCouponDto;
+import com.hexa.QuitQ.DTO.UserCouponRequestDto;
+import com.hexa.QuitQ.DTO.UserCouponResponseDto;
 import com.hexa.QuitQ.Service.PaymentService;
 import com.hexa.QuitQ.entities.Payment;
 import com.hexa.QuitQ.enums.PaymentStatus;
@@ -93,5 +101,37 @@ public class PaymentController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-}
+    
+    @GetMapping("/getCoupons")
+    public ResponseEntity<?> getActiveCoupons(@RequestParam("userId") Long userId) throws ResourceNotFoundException {
+        String partnersId = "4bf14b49-d719-4a33-a9d4-9ceda9a6ae0a";
+        UUID partnerId = UUID.fromString(partnersId);
+        
+     
+    String getUserUrl = "http://localhost:8080/lms/api/v1/userCoupons/getUserByparam/?userId={userId}&partnerId={partnerId}";
+        UUID uId = restTemplate.getForObject(getUserUrl, UUID.class, userId, partnerId);
+       
+    String getCouponsUrl = "http://localhost:8080/lms/api/v1/userCoupons/getActiveCoupons/?uId={uId}";
+        UserCouponDto[] userCouponDtoArray = restTemplate.getForObject(getCouponsUrl, UserCouponDto[].class, uId);
+        List<UserCouponDto> userCouponDtoList = Arrays.asList(userCouponDtoArray);
+      
+        return ResponseEntity.ok(userCouponDtoList);
+    }
+    
 
+    @PostMapping("/applyCoupon")
+    public ResponseEntity<?> applyCoupon(@RequestBody UserCouponRequestDto userCouponRequestDto){
+    String getUserUrl = "http://localhost:8080/api/v1/lms/transactions/applyCoupon";
+    UserCouponResponseDto userCouponResponseDto=restTemplate.postForObject(getUserUrl,userCouponRequestDto, UserCouponResponseDto.class);
+    return ResponseEntity.ok(userCouponResponseDto);
+    }
+    
+    
+    @PostMapping("/finalPrice")
+    public ResponseEntity<?> applyCoupon(@RequestBody  PointsAmountRequestDto pointsAmountRequestDto){
+        String getUserUrl = "http://localhost:8080/api/v1/lms/transactions/finalPrice";
+        PointsAmountResponseDto pointsAmountResponseDto=restTemplate.postForObject(getUserUrl, pointsAmountRequestDto,PointsAmountResponseDto.class);
+        	return ResponseEntity.ok(pointsAmountResponseDto);
+   
+}
+}
