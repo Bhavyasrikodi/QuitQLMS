@@ -25,8 +25,11 @@ import com.hexa.QuitQ.DTO.PointsAmountResponseDto;
 import com.hexa.QuitQ.DTO.UserCouponDto;
 import com.hexa.QuitQ.DTO.UserCouponRequestDto;
 import com.hexa.QuitQ.DTO.UserCouponResponseDto;
+import com.hexa.QuitQ.Service.CustomerService;
 import com.hexa.QuitQ.Service.PaymentService;
+import com.hexa.QuitQ.ServiceImpl.CustomerServiceImpl;
 import com.hexa.QuitQ.entities.Payment;
+import com.hexa.QuitQ.entities.User;
 import com.hexa.QuitQ.enums.PaymentStatus;
 import com.hexa.QuitQ.exception.ResourceNotFoundException;
 import com.hexa.QuitQ.mapper.PaymentMapper;
@@ -51,10 +54,10 @@ public class PaymentController {
         try {
             Payment payment = paymentService.createPaymentforBuyNow(paymentRequestDto);
             PaymentDto paymentDto = paymentMapper.mapToPaymentDto(payment);
-            LMSTransactionRequestDto lmsTransactionRequestDto = new LMSTransactionRequestDto();
-            lmsTransactionRequestDto.setPayment_id(paymentDto.getPaymentId());
-            lmsTransactionRequestDto.setAmount(paymentDto.getAmount());
-            LMSTransactionRequestDto lmsResponse = restTemplate.postForObject("http://localhost:8080/api/v1/lms/transactions/newTransaction", lmsTransactionRequestDto , LMSTransactionRequestDto.class);
+            //LMSTransactionRequestDto lmsTransactionRequestDto = new LMSTransactionRequestDto();
+            //lmsTransactionRequestDto.setPayment_id(paymentDto.getPaymentId());
+            //lmsTransactionRequestDto.setAmount(paymentDto.getAmount());
+            //LMSTransactionRequestDto lmsResponse = restTemplate.postForObject("http://localhost:8080/api/v1/lms/transactions/newTransaction", lmsTransactionRequestDto , LMSTransactionRequestDto.class);
             return new ResponseEntity<>(paymentDto, HttpStatus.CREATED);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
@@ -102,14 +105,17 @@ public class PaymentController {
         }
     }
     
-    @GetMapping("/getCoupons")
-    public ResponseEntity<?> getActiveCoupons(@RequestParam("userId") Long userId) throws ResourceNotFoundException {
+@Autowired
+    private CustomerServiceImpl customerServiceImpl;
+//http://localhost:8080/api/v1/quitq/payments/getUserId/email?email=john.doe@example.com
+    @GetMapping("/getCoupons/email")
+    public ResponseEntity<?> getActiveCoupons(@RequestParam("email") String email) throws ResourceNotFoundException {
         String partnersId = "59d6f78c-f29b-41cd-a782-0c408133f97c";
         UUID partnerId = UUID.fromString(partnersId);
-        
+        User userId = customerServiceImpl.getUserIdByEmail(email);
      
     String getUserUrl = "http://localhost:8080/lms/api/v1/userCoupons/getUserByparam?userId={userId}&partnerId={partnerId}";
-        UUID uId = restTemplate.getForObject(getUserUrl, UUID.class, userId, partnerId);
+        UUID uId = restTemplate.getForObject(getUserUrl, UUID.class, userId.getUser_id(), partnerId);
         System.out.println("user :" + uId);
        
     String getCouponsUrl = "http://localhost:8080/lms/api/v1/userCoupons/getActiveCoupons?uId={uId}";

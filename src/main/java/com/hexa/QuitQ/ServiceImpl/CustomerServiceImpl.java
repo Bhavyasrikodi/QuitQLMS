@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -143,6 +144,11 @@ public class CustomerServiceImpl implements CustomerService{
             throw new ResourceNotFoundException("Customer", "id", id);
         }
     }
+
+    public User getUserIdByEmail(String email) {
+		return userRepository.getUserIdByEmail(email);
+	}
+
 	
 
 	
