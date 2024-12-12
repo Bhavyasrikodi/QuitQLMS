@@ -77,7 +77,7 @@ public class ProductController {
     	}
     	return ResponseEntity.status(HttpStatus.CREATED).body(psDtoList);
     }
-    @GetMapping("/getofferpercentange")
+    @GetMapping("/getoffer")
     public ResponseEntity<?> getOfferPercentage(@RequestParam("userId") Long userId) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User ID must not be null");
