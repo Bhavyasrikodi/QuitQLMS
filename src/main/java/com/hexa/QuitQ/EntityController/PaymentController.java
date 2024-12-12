@@ -104,17 +104,18 @@ public class PaymentController {
     
     @GetMapping("/getCoupons")
     public ResponseEntity<?> getActiveCoupons(@RequestParam("userId") Long userId) throws ResourceNotFoundException {
-        String partnersId = "4bf14b49-d719-4a33-a9d4-9ceda9a6ae0a";
+        String partnersId = "59d6f78c-f29b-41cd-a782-0c408133f97c";
         UUID partnerId = UUID.fromString(partnersId);
         
      
-    String getUserUrl = "http://localhost:8080/lms/api/v1/userCoupons/getUserByparam/?userId={userId}&partnerId={partnerId}";
+    String getUserUrl = "http://localhost:8080/lms/api/v1/userCoupons/getUserByparam?userId={userId}&partnerId={partnerId}";
         UUID uId = restTemplate.getForObject(getUserUrl, UUID.class, userId, partnerId);
+        System.out.println("user :" + uId);
        
-    String getCouponsUrl = "http://localhost:8080/lms/api/v1/userCoupons/getActiveCoupons/?uId={uId}";
+    String getCouponsUrl = "http://localhost:8080/lms/api/v1/userCoupons/getActiveCoupons?uId={uId}";
         UserCouponDto[] userCouponDtoArray = restTemplate.getForObject(getCouponsUrl, UserCouponDto[].class, uId);
         List<UserCouponDto> userCouponDtoList = Arrays.asList(userCouponDtoArray);
-      
+        System.out.println("user :" + userCouponDtoList);
         return ResponseEntity.ok(userCouponDtoList);
     }
     

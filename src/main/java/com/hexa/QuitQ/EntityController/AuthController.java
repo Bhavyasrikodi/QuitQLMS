@@ -23,7 +23,6 @@ import com.hexa.QuitQ.Service.AdminService;
 import com.hexa.QuitQ.Service.AuthService;
 import com.hexa.QuitQ.Service.CustomerService;
 import com.hexa.QuitQ.Service.SellerService;
-import com.hexa.QuitQ.config.RestTemplateConfig;
 import com.hexa.QuitQ.entities.Admin;
 import com.hexa.QuitQ.entities.Customer;
 import com.hexa.QuitQ.entities.Seller;
@@ -93,7 +92,7 @@ public class AuthController {
 	        	return ResponseEntity.ok("Unsuccessful registration");
 	        }
     	}catch (DuplicateEmailException e) {
-	       	return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
 	    }
     }
     
