@@ -1,6 +1,7 @@
 package com.hexa.QuitQ.EntityController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import com.hexa.QuitQ.DTO.OffersDto;
 import com.hexa.QuitQ.DTO.ProductDto;
 import com.hexa.QuitQ.DTO.ProductSellerDto;
 import com.hexa.QuitQ.DTO.TiersDto;
+import com.hexa.QuitQ.DTO.UserCouponDto;
 import com.hexa.QuitQ.Service.CustomerService;
 import com.hexa.QuitQ.Service.ProductService;
 import com.hexa.QuitQ.entities.Product;
@@ -49,6 +51,9 @@ public class ProductController {
         this.customerService = customerService;
         this.restTemplate = restTemplate;
     }
+
+    String partnersId = "71ba75b8-780f-4aba-964d-345aa739f35f";
+    UUID partnerId = UUID.fromString(partnersId);
 
     // http://localhost:8080/api/v1/products/seller/create?email=lakshmisowmya@example.com
     @PostMapping("/seller/create")
@@ -83,7 +88,6 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User ID must not be null");
         }
 
-        double offerPercentage = 0.0;
         String partnersId = "71ba75b8-780f-4aba-964d-345aa739f35f";
         UUID partnerId = UUID.fromString(partnersId);
 
@@ -101,6 +105,23 @@ public class ProductController {
             String getOfferUrl = "http://localhost:8080/api/v1/lms/offers/ getOfferByProgramIdAndTierId?program_id={programId}&tier_id={tierId}";
             OffersDto offer = restTemplate.getForObject(getOfferUrl, OffersDto.class, programId, tierId);
             return ResponseEntity.status(HttpStatus.OK).body(offer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request");
+        }
+    }
+    
+    @GetMapping("/getallactiveoffers")
+    public ResponseEntity<?> getallactiveoffers() {
+
+        try {
+            String getProgramUrl = "http://localhost:8080/api/v1/lms/programs/getCurrentProgramId?partnerId={partnerId}";
+            UUID programId = restTemplate.getForObject(getProgramUrl, UUID.class, partnerId);
+            System.out.println(programId);
+
+            String getOfferUrl = "http://localhost:8080/api/v1/lms/offers/getOffersByProgramId?program_id={programId}";
+            OffersDto[] offerList = restTemplate.getForObject(getOfferUrl, OffersDto[].class, programId);
+            List<OffersDto> offers = Arrays.asList(offerList);
+            return ResponseEntity.status(HttpStatus.OK).body(offers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request");
         }

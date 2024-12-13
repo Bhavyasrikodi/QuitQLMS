@@ -20,7 +20,7 @@ public class UserCouponDto {
 	
 	@Id
 	private String couponCode;
-
+	private String couponTitle;
 
 
 	private UUID uId;
@@ -36,7 +36,7 @@ public class UserCouponDto {
 	private LocalDateTime expiry;
 	private LocalDateTime couponUsedDate;
 	public UserCouponDto(String couponCode, UUID uId, UUID couponId, LocalDateTime issuedOn, UserCouponStatus status,
-			LocalDateTime expiry, LocalDateTime couponUsedDate) {
+			LocalDateTime expiry, LocalDateTime couponUsedDate, String couponTitle) {
 		super();
 		this.couponCode = couponCode;
 		this.uId = uId;
@@ -45,6 +45,7 @@ public class UserCouponDto {
 		this.status = status;
 		this.expiry = expiry;
 		this.couponUsedDate = couponUsedDate;
+		this.couponTitle = couponTitle;
 	}
 	public UserCouponDto() {
 		super();
@@ -91,6 +92,12 @@ public class UserCouponDto {
 	}
 	public void setCouponUsedDate(LocalDateTime couponUsedDate) {
 		this.couponUsedDate = couponUsedDate;
+	}
+	public String getCouponTitle() {
+		return couponTitle;
+	}
+	public void setCouponTitle(String couponTitle) {
+		this.couponTitle = couponTitle;
 	}
 
 	
