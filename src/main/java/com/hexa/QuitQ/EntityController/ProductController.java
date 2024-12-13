@@ -83,13 +83,10 @@ public class ProductController {
     	return ResponseEntity.status(HttpStatus.CREATED).body(psDtoList);
     }
     @GetMapping("/getoffer")
-    public ResponseEntity<?> getOfferPercentage(@RequestParam("userId") Long userId) {
+    public ResponseEntity<?> getOfferPercentage(@RequestParam Long userId,UUID partnerId) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User ID must not be null");
-        }
-
-        String partnersId = "71ba75b8-780f-4aba-964d-345aa739f35f";
-        UUID partnerId = UUID.fromString(partnersId);
+        }     
 
         try {
             String getProgramUrl = "http://localhost:8080/api/v1/lms/programs/getCurrentProgramId?partnerId={partnerId}";
@@ -111,7 +108,7 @@ public class ProductController {
     }
     
     @GetMapping("/getallactiveoffers")
-    public ResponseEntity<?> getallactiveoffers() {
+    public ResponseEntity<?> getallactiveoffers(@RequestParam UUID partnerId) {
 
         try {
             String getProgramUrl = "http://localhost:8080/api/v1/lms/programs/getCurrentProgramId?partnerId={partnerId}";
