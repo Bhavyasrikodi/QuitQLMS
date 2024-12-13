@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.hexa.QuitQ.DTO.LMSTransactionRequestDto;
 import com.hexa.QuitQ.DTO.PaymentDto;
 import com.hexa.QuitQ.DTO.PaymentRequestDto;
 import com.hexa.QuitQ.DTO.PointsAmountRequestDto;
@@ -25,7 +24,7 @@ import com.hexa.QuitQ.DTO.PointsAmountResponseDto;
 import com.hexa.QuitQ.DTO.UserCouponDto;
 import com.hexa.QuitQ.DTO.UserCouponRequestDto;
 import com.hexa.QuitQ.DTO.UserCouponResponseDto;
-import com.hexa.QuitQ.Service.CustomerService;
+import com.hexa.QuitQ.DTO.UserValidationDto;
 import com.hexa.QuitQ.Service.PaymentService;
 import com.hexa.QuitQ.ServiceImpl.CustomerServiceImpl;
 import com.hexa.QuitQ.entities.Payment;
@@ -132,6 +131,13 @@ public class PaymentController {
     UserCouponResponseDto userCouponResponseDto=restTemplate.postForObject(getUserUrl,userCouponRequestDto, UserCouponResponseDto.class);
     return ResponseEntity.ok(userCouponResponseDto);
     }
+
+    @PostMapping("/redeemCoupon")
+    public boolean redeemCoupon(@RequestBody UserValidationDto userValidationDto){
+        String getUserUrl =  "http://localhost:8080/lms/api/v1/userCoupons/redeem";
+        restTemplate.postForObject(getUserUrl, userValidationDto, Boolean.class );
+        return true;
+    }
     
     
     @PostMapping("/finalPrice")
@@ -140,5 +146,8 @@ public class PaymentController {
         PointsAmountResponseDto pointsAmountResponseDto=restTemplate.postForObject(getUserUrl, pointsAmountRequestDto,PointsAmountResponseDto.class);
         	return ResponseEntity.ok(pointsAmountResponseDto);
    
-}
+    }
+
+
+
 }
