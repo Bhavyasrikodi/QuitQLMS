@@ -2,6 +2,7 @@ package com.hexa.QuitQ.EntityController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.hexa.QuitQ.DTO.OffersDto;
 import com.hexa.QuitQ.DTO.ProductDto;
 import com.hexa.QuitQ.DTO.ProductSellerDto;
+import com.hexa.QuitQ.DTO.TiersDto;
+import com.hexa.QuitQ.Service.CustomerService;
 import com.hexa.QuitQ.Service.ProductService;
 import com.hexa.QuitQ.entities.Product;
 import com.hexa.QuitQ.enums.ProductCategory;
@@ -34,12 +39,15 @@ import jakarta.validation.Valid;
 public class ProductController {
 
     private final ProductService productService;
+    private final CustomerService customerService;	
     private final ProductMapper productMapper;
-
+    private RestTemplate restTemplate;
     @Autowired
-    public ProductController(ProductService productService, ProductMapper productMapper) {
+    public ProductController(ProductService productService, CustomerService customerService, ProductMapper productMapper, RestTemplate restTemplate) {
         this.productService = productService;
         this.productMapper = productMapper;
+        this.customerService = customerService;
+        this.restTemplate = restTemplate;
     }
 
     // http://localhost:8080/api/v1/products/seller/create?email=lakshmisowmya@example.com
@@ -68,6 +76,34 @@ public class ProductController {
             psDtoList.add(responseDto);
     	}
     	return ResponseEntity.status(HttpStatus.CREATED).body(psDtoList);
+    }
+    @GetMapping("/getoffer")
+    public ResponseEntity<?> getOfferPercentage(@RequestParam("userId") Long userId) {
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User ID must not be null");
+        }
+
+        double offerPercentage = 0.0;
+        String partnersId = "71ba75b8-780f-4aba-964d-345aa739f35f";
+        UUID partnerId = UUID.fromString(partnersId);
+
+        try {
+            String getProgramUrl = "http://localhost:8080/api/v1/lms/programs/getCurrentProgramId?partnerId={partnerId}";
+            UUID programId = restTemplate.getForObject(getProgramUrl, UUID.class, partnerId);
+            System.out.println(programId);
+
+            String getTierUrl = "http://localhost:8080/api/v1/lms/users/getUserTier?userId={userId}&partnerId={partnerId}";
+            TiersDto tier = restTemplate.getForObject(getTierUrl, TiersDto.class, userId, partnerId);
+            UUID tierId = tier.getTierId();
+            System.out.println("TierId: " + tierId);
+            System.out.println("programId: " + programId);
+
+            String getOfferUrl = "http://localhost:8080/api/v1/lms/offers/ getOfferByProgramIdAndTierId?program_id={programId}&tier_id={tierId}";
+            OffersDto offer = restTemplate.getForObject(getOfferUrl, OffersDto.class, programId, tierId);
+            return ResponseEntity.status(HttpStatus.OK).body(offer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request");
+        }
     }
 
     // http://localhost:8080/api/v1/products/getallproducts
