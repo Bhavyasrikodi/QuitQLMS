@@ -3,10 +3,10 @@ package com.hexa.QuitQ.DTO;
 
 public class PointsAmountResponseDto {
 
-	private Double amountToBePaid;
+	private float amountToBePaid;
 	private Double spentPoints;
 	private Double receivedPoints;
-	public PointsAmountResponseDto(Double amountToBePaid, Double spentPoints, Double receivedPoints) {
+	public PointsAmountResponseDto(float amountToBePaid, Double spentPoints, Double receivedPoints) {
 		super();
 		this.amountToBePaid = amountToBePaid;
 		this.spentPoints = spentPoints;
@@ -16,10 +16,10 @@ public class PointsAmountResponseDto {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Double getAmountToBePaid() {
+	public float getAmountToBePaid() {
 		return amountToBePaid;
 	}
-	public void setAmountToBePaid(Double amountToBePaid) {
+	public void setAmountToBePaid(float amountToBePaid) {
 		this.amountToBePaid = amountToBePaid;
 	}
 	public Double getSpentPoints() {

@@ -61,7 +61,7 @@ public class PaymentDto {
 
 	public PaymentDto(float amount, String paymentModeNumber, PaymentMode paymentMode,
 			PaymentStatus paymentStatus, float totalOrderAmount, String shippingAddress, LocalDateTime orderDate,
-			 List<OrderItemDto> orderItems, String user_name, Long phone_number, String email) {
+			 List<OrderItemDto> orderItems, String user_name, Long phone_number, String email, long paymentId) {
 		super();
 		this.amount = amount;
 		this.paymentModeNumber = paymentModeNumber;
@@ -74,6 +74,7 @@ public class PaymentDto {
 		this.user_name = user_name;
 		this.phone_number = phone_number;
 		this.email = email;
+		this.paymentId = paymentId;
 	}
 
 

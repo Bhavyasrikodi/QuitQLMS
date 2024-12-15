@@ -41,7 +41,6 @@ public class PaymentMapper {
         paymentDto.setUser_name(orderDto.getUser_name());
         paymentDto.setPhone_number(orderDto.getPhone_number());
         paymentDto.setEmail(orderDto.getEmail());
-
         paymentDto.setPaymentMode(orderDto.getPaymentMode());
         
 	    return paymentDto;

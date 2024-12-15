@@ -6,8 +6,9 @@ import java.util.UUID;
 public class PointsAmountRequestDto {
 	private long userId;
 	private UUID partnerId;
-	private Double amount;
-	public PointsAmountRequestDto(long userId, UUID partnerId, Double amount) {
+	private float amount;
+	private boolean isPointsUsed;
+	public PointsAmountRequestDto(long userId, UUID partnerId, float amount) {
 		super();
 		this.userId = userId;
 		this.partnerId = partnerId;
@@ -29,12 +30,20 @@ public class PointsAmountRequestDto {
 	public void setPartnerId(UUID partnerId) {
 		this.partnerId = partnerId;
 	}
-	public Double getAmount() {
+	public float getAmount() {
 		return amount;
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
+
+    public boolean isIsPointsUsed() {
+        return isPointsUsed;
+    }
+
+    public void setIsPointsUsed(boolean isPointsUsed) {
+        this.isPointsUsed = isPointsUsed;
+    }
 
 	
 	
