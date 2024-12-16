@@ -52,7 +52,7 @@ public class ProductController {
         this.restTemplate = restTemplate;
     }
 
-    String partnersId = "71ba75b8-780f-4aba-964d-345aa739f35f";
+    String partnersId = "0ee3217e-02bd-441d-a688-52899dcc90f6";
     UUID partnerId = UUID.fromString(partnersId);
 
     // http://localhost:8080/api/v1/products/seller/create?email=lakshmisowmya@example.com
