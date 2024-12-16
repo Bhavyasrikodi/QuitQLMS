@@ -81,7 +81,7 @@ public class AuthController {
 	        UserDto userDto = this.customerMapper.mapToUserDto(createdCustomer);
             LMSUserRequestDto lmsUserRequestDto = new LMSUserRequestDto();
             lmsUserRequestDto.setUserId(createdCustomer.getCustomer_id());
-            lmsUserRequestDto.setPartnerId(createdCustomer.getUsers().getPartnerId());
+            lmsUserRequestDto.setPartnerId(partnerId);
             LMSUserRequestDto lmsResponse = restTemplate.postForObject("http://localhost:8080/api/v1/lms/users/createUser", lmsUserRequestDto, LMSUserRequestDto.class);
 	        String token = jwtTokenProvider.generateToken(
 	            new UsernamePasswordAuthenticationToken(createdCustomer.getUsers().getEmail(), createdCustomer.getUsers().getPassword())

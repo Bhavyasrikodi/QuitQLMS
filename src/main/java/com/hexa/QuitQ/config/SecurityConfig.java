@@ -88,7 +88,7 @@ public class SecurityConfig {
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true); // Allow credentials like Authorization headers
-	    config.addAllowedOrigin("http://localhost:3000"); // Allow your frontend
+	    config.addAllowedOrigin("http://localhost:3001"); // Allow your frontend
 	    config.addAllowedHeader("*"); // Allow all headers
 	    config.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
 	    source.registerCorsConfiguration("/**", config); // Apply this configuration to all endpoints
