@@ -1,6 +1,8 @@
 package com.hexa.QuitQ.EntityController;
 
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +71,7 @@ public class AuthController {
         this.sellerMapper = sellerMapper;
         this.authService = authService;
     }
-
+    private UUID partnerId = UUID.fromString("0ee3217e-02bd-441d-a688-52899dcc90f6");
     //	http://localhost:8080/api/v1/quitq/auth/customer/register
     @PostMapping("customer/register")
     public ResponseEntity<String> register(@Valid @RequestBody CustomerUserDto customerUserDto) {
@@ -79,7 +81,7 @@ public class AuthController {
 	        UserDto userDto = this.customerMapper.mapToUserDto(createdCustomer);
             LMSUserRequestDto lmsUserRequestDto = new LMSUserRequestDto();
             lmsUserRequestDto.setUserId(createdCustomer.getCustomer_id());
-            lmsUserRequestDto.setPartnerId(createdCustomer.getUsers().getPartnerId());
+            lmsUserRequestDto.setPartnerId(partnerId);
             LMSUserRequestDto lmsResponse = restTemplate.postForObject("http://localhost:8080/api/v1/lms/users/createUser", lmsUserRequestDto, LMSUserRequestDto.class);
 	        String token = jwtTokenProvider.generateToken(
 	            new UsernamePasswordAuthenticationToken(createdCustomer.getUsers().getEmail(), createdCustomer.getUsers().getPassword())
